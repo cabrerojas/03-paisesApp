@@ -11,13 +11,17 @@ export class PorPaisComponent {
 
   termino :string = "";
   hayError: boolean = false;
+  paisesSugeridos  : Country[] = [];
+  mostrarSugerencias: boolean = false;
   paises  : Country[] = [];
+
 
   constructor(private paisServices:PaisService) { }
 
   buscar( termio: string){
 
     this.hayError = false;
+    this.mostrarSugerencias = false;
     this.termino = termio;
     
     this.paisServices.buscarPorPais(this.termino)
@@ -30,6 +34,18 @@ export class PorPaisComponent {
         this.paises   = [];
       });
         
+  }
+
+  sugerencias(termino: string){
+    this.mostrarSugerencias = true;
+    this.hayError = false;
+    this.termino = termino;
+    this.paisServices.buscarPorPais(termino)
+        .subscribe( 
+          paises => this.paisesSugeridos = paises.slice(0,3),
+          (err) => this.paisesSugeridos = []
+          );
+
   }
 
 
